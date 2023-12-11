@@ -1,5 +1,5 @@
 function Home() {
-  return <h1 align="center"> Em Contrução </h1>;
+  return <h1 align="center"> Em Construção </h1>;
 }
 
 export default Home;
