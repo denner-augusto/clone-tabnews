@@ -1,3 +1,3 @@
-test("nome do teste", function () {
-  console.log("teste de função anônima");
+test("nome do teste", () => {
+  console.log("teste de arrow function");
 });
