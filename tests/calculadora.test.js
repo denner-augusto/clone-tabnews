@@ -1,4 +1,3 @@
-test("nome do teste", callbackFunction);
-function callbackFunction() {
-  console.log("teste de função");
-}
+test("nome do teste", function () {
+  console.log("teste de função anônima");
+});
