@@ -1,7 +1,3 @@
-test("nome do teste", () => {
-  console.log("teste de arrow function");
-});
-
-test("testando outra condição no sistema", () => {
-  console.log("segundo teste");
+test("teste do expect", () => {
+  expect(1).toBe(1);
 });
