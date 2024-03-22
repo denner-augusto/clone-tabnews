@@ -3,9 +3,13 @@ test("GET to /api/v1/status should return 200", async () => {
   expect(response.status).toBe(200);
 
   const responseBody = await response.json();
-  expect(responseBody.updated_at).toBeDefined();
 
+  expect(responseBody.updated_at).toBeDefined();
   expect(responseBody.postgres_version).toBeDefined();
+  expect(responseBody.max_connections).toBeDefined();
+  expect(responseBody.active_connections).toBeDefined();
+
+  expect(responseBody.postgres_version).toEqual("16.2");
 
   const parsedUpdatedAt = new Date(responseBody.updated_at).toISOString();
   expect(responseBody.updated_at).toEqual(parsedUpdatedAt);
