@@ -1,17 +1,23 @@
 import database from "infra/database.js";
 async function status(request, response) {
   const updatedAt = new Date().toISOString();
-  const dbParams = await database.query(
-    "SELECT version() as version, current_setting('max_connections') as max;",
+  const databaseVersionResult = await database.query("SHOW server_version;");
+  const databaseMaxConnectionsResult = await database.query(
+    "SELECT current_setting('max_connections') as max;",
   );
-  const dbParamsActive = await database.query(
+
+  const databaseCurrentConnectionsResult = await database.query(
     "SELECT p.pid, p.usename, p.state, count(*) as active FROM pg_stat_activity AS p WHERE p.state = 'active' GROUP BY 1,2,3;",
   );
+  const databaseVersionValue = databaseVersionResult.rows[0].server_version;
+  const maxConnectionsValue = databaseMaxConnectionsResult.rows[0].max;
+  const currentConnectionsValue =
+    databaseCurrentConnectionsResult.rows[0].active;
   response.status(200).json({
     updated_at: updatedAt,
-    postgres_version: dbParams.rows[0].version,
-    max_connections: dbParams.rows[0].max,
-    active_connections: dbParamsActive.rows[0].active,
+    postgres_version: databaseVersionValue,
+    max_connections: maxConnectionsValue,
+    active_connections: currentConnectionsValue,
   });
 }
 
