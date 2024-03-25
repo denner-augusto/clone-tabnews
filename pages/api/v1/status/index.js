@@ -5,11 +5,11 @@ async function status(request, response) {
   const databaseMaxConnectionsResult = await database.query(
     "SHOW max_connections;",
   );
-  const databaseName = request.query.databaseName;
-  console.log(`Selected database: ${databaseName}`);
-  const databaseOpenedConnectionsResult = await database.query(
-    `SELECT count(*)::int as active FROM pg_stat_activity WHERE datname = '${databaseName}'`,
-  );
+  const databaseName = process.env.POSTGRES_DB;
+  const databaseOpenedConnectionsResult = await database.query({
+    text: "SELECT count(*)::int as active FROM pg_stat_activity WHERE datname = $1;",
+    values: [databaseName],
+  });
   const databaseVersionValue = databaseVersionResult.rows[0].server_version;
   const maxConnectionsValue =
     databaseMaxConnectionsResult.rows[0].max_connections;
@@ -21,7 +21,6 @@ async function status(request, response) {
   // );
   // const databaseOpenedConnectionsValue =
   //   databaseCurrentConnectionsResult.rows.length;
-  console.log(databaseOpenedConnectionsResult.rows);
   response.status(200).json({
     updated_at: updatedAt,
     postgres_version: databaseVersionValue,
