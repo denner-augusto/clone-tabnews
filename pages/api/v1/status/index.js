@@ -5,9 +5,11 @@ async function status(request, response) {
   const databaseMaxConnectionsResult = await database.query(
     "SHOW max_connections;",
   );
-
+  const databaseName = "local_db";
   const databaseOpenedConnectionsResult = await database.query(
-    "SELECT p.pid, p.usename, p.state, count(*) as active FROM pg_stat_activity AS p WHERE p.state = 'active' AND datname = 'local_db' GROUP BY 1,2,3;",
+    "SELECT count(*)::int as active FROM pg_stat_activity WHERE datname = '" +
+      databaseName +
+      "'",
   );
   const databaseVersionValue = databaseVersionResult.rows[0].server_version;
   const maxConnectionsValue =
